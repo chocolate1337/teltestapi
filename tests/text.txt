@@ -1,0 +1,174 @@
+============================= test session starts =============================
+platform win32 -- Python 3.9.2, pytest-6.2.4, py-1.10.0, pluggy-0.13.1
+rootdir: C:\Users\vlad\PycharmProjects\bzteltestapi\tests
+plugins: hypothesis-6.13.6, subtests-0.4.0, schemathesis-3.7.1, tavern-1.14.2
+collected 11 items
+
+test.tavern.yaml .......FF..                                             [100%]
+
+================================== FAILURES ===================================
+_ C:\Users\vlad\PycharmProjects\bzteltestapi\tests\test.tavern.yaml::Make sure password old change min check work _
+Format variables:
+
+Source test stage (line 132):
+  - name: Make sure password old change work no fields
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: min
+        password2: min
+        old_password: new_password
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "password to short. Min length is 6 chars"
+
+Formatted stage:
+  name: Make sure password old change work no fields
+  request:
+    headers:
+      content-type: application/json
+    json:
+      old_password: new_password
+      password1: min
+      password2: min
+      username: test_register_new1
+    method: PUT
+    url: http://bzteltestapi.pythonanywhere.com/users
+  response:
+    json:
+      message: password to short. Min length is 6 chars
+    status_code: 400
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Make sure password old change work no fields' failed:
+    - Status code was 202, expected 400
+    - Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'password to short. Min length is 6 chars'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+---------------------------- Captured stderr call -----------------------------
+14:42:56 [INFO]: (tavern.core:147) Running test : Make sure password old change min check work
+14:42:56 [INFO]: (tavern.core:254) Running stage : Make sure password old change work no fields
+14:42:56 [INFO]: (tavern._plugins.rest.response:49) Response: '<Response [202]>'
+14:42:56 [ERROR]: (tavern.response.base:43) Status code was 202, expected 400
+14:42:56 [ERROR]: (tavern.response.base:41) Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'password to short. Min length is 6 chars'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 399, in check_keys_match_recursive
+    assert actual_val == expected_val
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\response\base.py", line 88, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 442, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(full_msg) from e
+tavern.util.exceptions.KeyMismatchError: Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'password to short. Min length is 6 chars'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+------------------------------ Captured log call ------------------------------
+INFO     tavern.core:core.py:147 Running test : Make sure password old change min check work
+INFO     tavern.core:core.py:254 Running stage : Make sure password old change work no fields
+INFO     tavern._plugins.rest.response:response.py:49 Response: '<Response [202]>'
+ERROR    tavern.response.base:base.py:43 Status code was 202, expected 400
+ERROR    tavern.response.base:base.py:41 Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'password to short. Min length is 6 chars'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 399, in check_keys_match_recursive
+    assert actual_val == expected_val
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\response\base.py", line 88, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 442, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(full_msg) from e
+tavern.util.exceptions.KeyMismatchError: Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'password to short. Min length is 6 chars'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+_ C:\Users\vlad\PycharmProjects\bzteltestapi\tests\test.tavern.yaml::Make sure password old change check password2 _
+Format variables:
+
+Source test stage (line 150):
+  - name: Make sure password old change check password2
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: dontcheck
+        password2: mina
+        old_password: min
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "Passwords does not match"
+
+Formatted stage:
+  name: Make sure password old change check password2
+  request:
+    headers:
+      content-type: application/json
+    json:
+      old_password: min
+      password1: dontcheck
+      password2: mina
+      username: test_register_new1
+    method: PUT
+    url: http://bzteltestapi.pythonanywhere.com/users
+  response:
+    json:
+      message: Passwords does not match
+    status_code: 400
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Make sure password old change check password2' failed:
+    - Status code was 202, expected 400
+    - Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'Passwords does not match'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+---------------------------- Captured stderr call -----------------------------
+14:42:56 [INFO]: (tavern.core:147) Running test : Make sure password old change check password2
+14:42:56 [INFO]: (tavern.core:254) Running stage : Make sure password old change check password2
+14:42:57 [INFO]: (tavern._plugins.rest.response:49) Response: '<Response [202]>'
+14:42:57 [ERROR]: (tavern.response.base:43) Status code was 202, expected 400
+14:42:57 [ERROR]: (tavern.response.base:41) Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'Passwords does not match'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 399, in check_keys_match_recursive
+    assert actual_val == expected_val
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\response\base.py", line 88, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 442, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(full_msg) from e
+tavern.util.exceptions.KeyMismatchError: Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'Passwords does not match'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+------------------------------ Captured log call ------------------------------
+INFO     tavern.core:core.py:147 Running test : Make sure password old change check password2
+INFO     tavern.core:core.py:254 Running stage : Make sure password old change check password2
+INFO     tavern._plugins.rest.response:response.py:49 Response: '<Response [202]>'
+ERROR    tavern.response.base:base.py:43 Status code was 202, expected 400
+ERROR    tavern.response.base:base.py:41 Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'Passwords does not match'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 399, in check_keys_match_recursive
+    assert actual_val == expected_val
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\response\base.py", line 88, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "C:\Users\vlad\PycharmProjects\bzteltestapi\venv\lib\site-packages\tavern\util\dict_util.py", line 442, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(full_msg) from e
+tavern.util.exceptions.KeyMismatchError: Structure of returned data was different than expected  - Extra keys in response: {'result'} - Keys missing from response: {'message'} (expected = '{'message': 'Passwords does not match'}' (type = <class 'dict'>), actual = '{'result': 'Password successfully updated!'}' (type = <class 'dict'>))
+=========================== short test summary info ===========================
+FAILED test.tavern.yaml::Make sure password old change min check work
+FAILED test.tavern.yaml::Make sure password old change check password2
+========================= 2 failed, 9 passed in 3.85s =========================
+
+
+

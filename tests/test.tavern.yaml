@@ -1,0 +1,219 @@
+---
+
+test_name: Make sure server register normaly
+
+stages:
+  - name: Make sure registration work
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: password
+        password2: password
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+      json:
+        result: 'New user test_register_new1 successfully created'
+
+---
+
+test_name: Make sure user is exist normaly
+
+stages:
+  - name: Make sure user is exist normaly
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: password
+        password2: password
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "User Already exist"
+
+---
+test_name: Make sure password check work
+
+stages:
+  - name: Make sure password check work
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: password
+        password2: password1
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "Passwords does not match"
+
+---
+test_name: Make sure password check empty work
+stages:
+  - name: Make sure password check empty work
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: ""
+        password2: ""
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "Empty fields: ['password1', 'password2']"
+
+---
+test_name: Make sure password check min
+stages:
+  - name: Make sure password check min
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: "12"
+        password2: "12"
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "password to short. Min length is 6 chars"
+
+---
+test_name: Make sure password old change work
+stages:
+  - name: Make sure password old change work
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: new_password
+        password2: new_password
+        old_password: password
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 202
+      json:
+        result: 'Password successfully updated!'
+---
+test_name: Make sure password old change work no fields
+stages:
+  - name: Make sure password old change work no fields
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: ""
+        password2: ""
+        old_password: new_password
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+---
+test_name: Make sure password old change min check work
+stages:
+  - name: Make sure password old change work no fields
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: min
+        password2: min
+        old_password: new_password
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "password to short. Min length is 6 chars"
+---
+test_name: Make sure password old change check password2
+stages:
+  - name: Make sure password old change check password2
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: dontcheck
+        password2: mina
+        old_password: min
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 400
+      json:
+        message: "Passwords does not match"
+---
+test_name: Change password for jwt
+stages:
+  - name: change password for jwt
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/users
+      json:
+        username: test_register_new1
+        password1: newpassword
+        password2: newpassword
+        old_password: dontcheck
+      method: PUT
+      headers:
+        content-type: application/json
+    response:
+      status_code: 202
+---
+test_name: jwt token
+stages:
+  - name: jwt token
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/login
+      json:
+        username: test_register_new1
+        password: newpassword
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      headers:
+        content-type: application/json
+      save:
+        json:
+          test_login_token: access_token
+  - name: Make sure jwt token is work
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/todos/test_register_new1
+      method: GET
+      headers:
+        content-type: application/json
+        Authorization: "Bearer {test_login_token}"
+    response:
+      status_code: 200
+  - name: Make sure logout is dont work
+    request:
+      url: http://bzteltestapi.pythonanywhere.com/logout/test_register_new1
+      json:
+        username: test_register_new1
+      method: DELETE
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
